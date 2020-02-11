@@ -52,11 +52,11 @@ def part3(string):
     back = n-1
     while (front < back):
         if (string[front] != string[back]):
-            print('not a palindrome')
+            print('False')
             return
         front += 1
         back -= 1
-    print('is a palindrome')
+    print('True')
 
 
 def part4a(filename, username, password):
@@ -69,9 +69,9 @@ def part4a(filename, username, password):
     pword_encode = base64.b64encode(password.encode('utf-8'))
 
     with open(filename,'w+') as file:
-        file.write(str(user_encode))
+        file.write(str(user_encode,"utf-8"))
         file.write('\n')
-        file.write(str(pword_encode))
+        file.write(str(pword_encode,"utf-8"))
 
 def part4b(filename, password=None):
     """
@@ -81,18 +81,35 @@ def part4b(filename, password=None):
     """
     with open(filename,'r') as file:
         username = file.readline()
-        password = file.readline()
-        print(str(base64.b64decode(username)))
-        # print(password)
+        pword = file.readline()
+
+    username += "==="
+    username = base64.b64decode(username.encode('ascii')).decode('ascii')
+    print("Username: ", username)
+
+    pword += "==="
+    pword = base64.b64decode(pword.encode('ascii')).decode('ascii')
+    print("Password: ", pword)
+    
+    user_encode = base64.b64encode(username.encode('utf-8'))
+    if (password != None):
+        pword_encode = base64.b64encode(password.encode('utf-8'))
+    else:
+        pword_encode = base64.b64encode(pword.encode('utf-8'))
+        
+    with open(filename,'w+') as file:
+        file.write(str(user_encode,"utf-8"))
+        file.write('\n')
+        file.write(str(pword_encode,"utf-8"))
 
 
 if __name__ == "__main__":
-    # part1(3)  # odd!
-    # part1(4)  # even!
-    # part2()
-    # part3("ratrace")  # False
-    # part3("racecar")  # True
+    part1(3)  # odd!
+    part1(4)  # even!
+    part2()
+    part3("ratrace")  # False
+    part3("racecar")  # True
     part4a("secret.txt", "naitian", "p4ssw0rd")
     part4b("secret.txt")
-    #part4b("secret.txt", password="p4ssw0rd!")
-    #part4b("secret.txt")
+    part4b("secret.txt", password="p4ssw0rd!")
+    part4b("secret.txt")
